@@ -4,3 +4,6 @@
 [submodule "author_classification_fs"]
 	path = author_classification_fs
 	url = https://github.com/raph-m/author_classification_fs
+[submodule "ml_on_author_prediction"]
+	path = ml_on_author_prediction
+	url = https://github.com/raph-m/ml_on_author_prediction
