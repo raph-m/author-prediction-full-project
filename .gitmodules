@@ -1,0 +1,3 @@
+[submodule "author_classification"]
+	path = author_classification
+	url = https://github.com/raph-m/author_classification.git

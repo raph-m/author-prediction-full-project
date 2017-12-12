@@ -34,4 +34,10 @@
 # my files to ignore:
 build-full-project-Desktop-Debug
 main/full-project.pro.user
+full-project.pro.user
 notes
+data
+build-author_project-Desktop-Debug/
+testResult.txt
+results.txt
+

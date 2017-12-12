@@ -15,18 +15,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += main.cpp \
-    author_classification/Preprocessing/testgit.cpp \
-    author_classification/Preprocessing/text.cpp \
-    author_classification/Preprocessing/block.cpp \
-    author_classification/Preprocessing/features.cpp \
-    author_classification/Preprocessing/buildtxt.cpp
 
-HEADERS += \
-    author_classification/Preprocessing/testgit.h \
-    author_classification/Preprocessing/text.h \
-    author_classification/Preprocessing/block.h \
-    author_classification/Preprocessing/features.h
-
-
-# INCLUDEPATH+=../author_classification/
+INCLUDEPATH+=author_classification/
 # INCLUDEPATH+=../author_classification_fs/
