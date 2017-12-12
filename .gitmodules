@@ -7,3 +7,6 @@
 [submodule "ml_on_author_prediction"]
 	path = ml_on_author_prediction
 	url = https://github.com/raph-m/ml_on_author_prediction
+[submodule "download_gutenberg"]
+	path = download_gutenberg
+	url = https://github.com/raph-m/download_gutenberg
