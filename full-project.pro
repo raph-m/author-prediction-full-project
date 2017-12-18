@@ -30,7 +30,7 @@ SOURCES += main.cpp \
     ml_on_author_prediction/KNN/knn.cpp \
     ml_on_author_prediction/KNN/distances.cpp \
     ml_on_author_prediction/KNN/dictionary.cpp \
-    ml_on_author_prediction/KNN/myknn_algo.cpp
+    ml_on_author_prediction/KNN/myknn_algo.cpp \
 
 HEADERS += \
     author_classification/Preprocessing/testgit.h \
