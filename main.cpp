@@ -13,16 +13,17 @@
 
 #include "ml_on_author_prediction/KNN/knn.h"
 
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QMainWindow>
-#include <QtCharts/QChartView>
-#include <QtCharts/QPieSeries>
-#include <QtCharts/QPieSlice>
+//#include <QtWidgets/QApplication>
+//#include <QtWidgets/QMainWindow>
+//#include <QtCharts/QChartView>
+//#include <QtCharts/QPieSeries>
+//#include <QtCharts/QPieSlice>
+#include <time.h>
 
 using namespace std;
 
 
-QT_CHARTS_USE_NAMESPACE
+//QT_CHARTS_USE_NAMESPACE
 
 void Ensemble(double ** pred,int nombreAlgo,int NombreAuteur,int k,int* AuteurK,double* ProbaK){
 
@@ -71,6 +72,10 @@ void Ensemble(double ** pred,int nombreAlgo,int NombreAuteur,int k,int* AuteurK,
 
 int main()
 {
+    time_t timer;
+    double new_time;
+    new_time = time(&timer);
+
     std::cout << "Fetching features..." << std::endl;
 
     int no_authors = 10;
@@ -80,12 +85,18 @@ int main()
     int lineCount = 0; //nbre de ligne du fichier csv qui résultera du texte test
     lineCount = preprocessingTest("../1013.txt","txt", "testResult");
 
+    new_time = difftime(time(&timer),new_time);
+    std::cout << new_time << " seconds since previous stage" << endl;
+
     std::cout << "Starting PCA..." << std::endl;
 
     float parameter = 0.99;
     std::string c = "../apprentissage_10.txt";
     std::string test_text = "../testResult.txt";
     principalComponentAnalysis(c,test_text, parameter);
+
+    new_time = difftime(time(&timer),new_time);
+    std::cout << new_time << " seconds since previous stage" << endl;
 
     std::cout << "Learning task..." << endl;
 
@@ -98,14 +109,25 @@ int main()
     multiclass_rs * classifier1 = new multiclass_rs(numberOfTrees, 10);
     double * predictions_random_forest = classifier1->run_random_forest(train, test);
 
+    new_time = difftime(time(&timer),new_time);
+    new_time /= 60;
+    std::cout << new_time << " minutes since previous stage" << endl;
+
     //hamza
 //    std::cout << "First KNN:" << endl;
 
 //    int NumbersofNeighbors=3;
 //    double* predictions_first_knn = KNN( NumbersofNeighbors, test, train);
+//    new_time = difftime(time(&timer),new_time);
+//    new_time /= 60;
+//    std::cout << new_time << " minutes since previous stage" << endl;
 
     //hugo
 //    std::cout << "Second KNN:" << endl;
+
+//    new_time = difftime(time(&timer),new_time);
+//    new_time /= 60;
+//    std::cout << new_time << " minutes since previous stage" << endl;
 
     std::cout << "Combining results of different learners..." << std::endl;
 
@@ -143,6 +165,9 @@ int main()
 //    window.setCentralWidget(chartView);
 //    window.resize(400, 300);
 //    window.show();
+
+//    new_time = difftime(time(&timer),new_time);
+//    std::cout << new_time << " seconds since previous stage" << endl;
 
     return 0;
 }
