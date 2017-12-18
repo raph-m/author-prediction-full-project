@@ -79,29 +79,29 @@ int main()
     std::cout << "Fetching features..." << std::endl;
 
     int no_authors = 10;
-    int nbriteration = 6;
-    // std::map<int, std::string> idToAuthor;
-    //idToAuthor = createTextFeatures(nbriteration);
-    int lineCount = 0; //nbre de ligne du fichier csv qui résultera du texte test
-    lineCount = preprocessingTest("../1013.txt","txt", "testResult");
+//    int nbriteration = 6;
+//    // std::map<int, std::string> idToAuthor;
+//    //idToAuthor = createTextFeatures(nbriteration);
+//    int lineCount = 0; //nbre de ligne du fichier csv qui résultera du texte test
+//    lineCount = preprocessingTest("../1013.txt","txt", "testResult");
 
-    new_time = difftime(time(&timer),new_time);
-    std::cout << new_time << " seconds since previous stage" << endl;
+//    new_time = difftime(time(&timer),new_time);
+//    std::cout << new_time << " seconds since previous stage" << endl;
 
-    std::cout << "Starting PCA..." << std::endl;
+//    std::cout << "Starting PCA..." << std::endl;
 
-    float parameter = 0.99;
-    std::string c = "../apprentissage_10.txt";
-    std::string test_text = "../testResult.txt";
-    principalComponentAnalysis(c,test_text, parameter);
+//    float parameter = 0.99;
+//    std::string c = "../apprentissage_10.txt";
+//    std::string test_text = "../testResult.txt";
+//    principalComponentAnalysis(c,test_text, parameter);
 
-    new_time = difftime(time(&timer),new_time);
-    std::cout << new_time << " seconds since previous stage" << endl;
+//    new_time = difftime(time(&timer),new_time);
+//    std::cout << new_time << " seconds since previous stage" << endl;
 
-    std::cout << "Learning task..." << endl;
+//    std::cout << "Learning task..." << endl;
 
-    //machine learning
-    std::cout << "Random Forest:" << std::endl;
+//    //machine learning
+//    std::cout << "Random Forest:" << std::endl;
 
     int numberOfTrees = 1;
     string train = "../finalMatrix.csv";
