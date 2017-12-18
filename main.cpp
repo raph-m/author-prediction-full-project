@@ -8,10 +8,11 @@
 int main(int argc, char *argv[])
 {
     std::cout << "ca compile ouais !" << std::endl;
-//    int nbriteration = 4;
-//    std::map<int, std::string> idToAuthor;
-//    //idToAuthor = createTextFeatures(nbriteration);
-//    createtxtFile(nbriteration, "results");
-//    preprocessingTest("../27.txt", "testResult");
+    int nbriteration = 6;
+    std::map<int, std::string> idToAuthor;
+    idToAuthor = createTextFeatures(nbriteration);
+    int lineCount = 0; //nbre de ligne du fichier csv qui résultera du texte test
+    lineCount=preprocessingTest("../1013.txt","txt", "testResult");
+
     return 0;
 }
