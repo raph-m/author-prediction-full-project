@@ -5,7 +5,7 @@
 #include <bits/stdc++.h>
 
 #include "author_classification/Preprocessing/text.h"
-#include "author_classification/Preprocessing/buildtxt.cpp"
+#include <author_classification/Preprocessing/buildtxt.cpp>
 
 #include "author_classification_fs/pca.h"
 
@@ -27,35 +27,23 @@ QT_CHARTS_USE_NAMESPACE
 void Ensemble(double ** pred,int nombreAlgo,int NombreAuteur,int k,int* AuteurK,double* ProbaK){
 
     double res[NombreAuteur];
-
     for(int i=0;i<NombreAuteur;i++)
         res[i]=0;
-
     for(int i=0;i<NombreAuteur;i++){
         for(int j=0;j<nombreAlgo;j++){
 
             res[i]=res[i]+pred[j][i];
         }
     }
-
     for(int i=0;i<NombreAuteur;i++)
         res[i]=res[i]/nombreAlgo;
-
     vector <int> a;
-
-
     for(int i=0;i<NombreAuteur;i++){
         a.push_back(res[i]);
     }
-
    std::sort(a.begin(), a.end());
-
    int b[NombreAuteur];
-
-
-
-
-    for (int i = 0; i < k; ++i){
+   for (int i = 0; i < k; ++i){
         ProbaK[i]=a.at(k-1-i);
 
         for(int j=0;j<NombreAuteur;j++){
@@ -64,7 +52,6 @@ void Ensemble(double ** pred,int nombreAlgo,int NombreAuteur,int k,int* AuteurK,
                 res[j]=-1;
             }
         }
-
         AuteurK[i]=b[i];
    }
  }
@@ -74,11 +61,11 @@ int main()
     std::cout << "Fetching features..." << std::endl;
 
     int no_authors = 10;
-    int nbriteration = 6;
-    // std::map<int, std::string> idToAuthor;
-    //idToAuthor = createTextFeatures(nbriteration);
-    int lineCount = 0; //nbre de ligne du fichier csv qui résultera du texte test
-    lineCount = preprocessingTest("../1013.txt","txt", "testResult");
+//    int nbriteration = 149;
+//    // std::map<int, std::string> idToAuthor;
+//    //idToAuthor = createTextFeatures(nbriteration);
+//    int lineCount = 0; //nbre de ligne du fichier csv qui résultera du texte test
+//    lineCount = preprocessingTest("../1013.txt","txt", "testResult");
 
     std::cout << "Starting PCA..." << std::endl;
 
