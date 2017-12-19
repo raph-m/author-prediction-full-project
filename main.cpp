@@ -12,6 +12,7 @@
 #include "ml_on_author_prediction/RS/multiclass_rs.h"
 
 #include "ml_on_author_prediction/KNN/knn.h"
+#include "ml_on_author_prediction/KNN/myknn_algo.h"
 
 //#include <QtWidgets/QApplication>
 //#include <QtWidgets/QMainWindow>
@@ -91,26 +92,54 @@ int main()
 //    std::cout << "Learning task..." << endl;
 
 //    //machine learning
-//    std::cout << "Random Forest:" << std::endl;
+    std::cout << "Random Forest:" << std::endl;
 
+    int lineCount = 11;
     int numberOfTrees = 1;
     string train = "../finalMatrix.csv";
     string test = "../finalTest.csv";
-    multiclass_rs * classifier1 = new multiclass_rs(numberOfTrees, 10);
-    double * predictions_random_forest = classifier1->run_random_forest(train, test);
+    multiclass_rs * classifier1 = new multiclass_rs(numberOfTrees, no_authors);
+    int * predictions_random_forest = classifier1->run_random_forest(train, test);
 
     new_time = difftime(time(&timer),new_time);
     new_time /= 60;
     std::cout << new_time << " minutes since previous stage" << endl;
 
-    //hamza
-//    std::cout << "First KNN:" << endl;
 
-//    int NumbersofNeighbors=3;
-//    double* predictions_first_knn = KNN( NumbersofNeighbors, test, train);
-//    new_time = difftime(time(&timer),new_time);
-//    new_time /= 60;
-//    std::cout << new_time << " minutes since previous stage" << endl;
+    std::cout << "First KNN:" << endl;
+
+    int NumbersofNeighbors=3;
+    int * predictions_first_knn = KNN_( NumbersofNeighbors, test, train);
+    new_time = difftime(time(&timer),new_time);
+    new_time /= 60;
+    std::cout << new_time << " minutes since previous stage" << endl;
+
+    std::cout << "Turning predictions into probability..." << std::endl;
+
+    double proba_rs [no_authors];
+    double proba_first_knn [no_authors];
+    for (int i = 0; i < no_authors; i++){
+        proba_rs[i] = 0;
+        proba_first_knn[i] = 0;
+    }
+
+    for (int i = 0; i < no_authors; i++) {
+        for (int j = 0; j < lineCount; j++){
+            if (predictions_random_forest[j] == i)
+                proba_rs[i] += 1;
+            if (predictions_first_knn[j] == i)
+                proba_first_knn[i] += 1;
+        }
+    }
+
+    for (int i = 0; i < no_authors; i++){
+        proba_rs[i] /= lineCount;
+        proba_first_knn[i] /= lineCount;
+    }
+
+    new_time = difftime(time(&timer),new_time);
+    std::cout << new_time << " seconds since previous stage" << endl;
+
 
     //hugo
 //    std::cout << "Second KNN:" << endl;
@@ -121,9 +150,10 @@ int main()
 
     std::cout << "Combining results of different learners..." << std::endl;
 
-    int no_algos = 1;
+    int no_algos = 2;
     double * res2 [no_algos];
-    res2[0] = predictions_random_forest;
+    res2[0] = proba_rs;
+    res2[1] = proba_first_knn;
     int no_main_authors = 3;
     double ProbaK[no_main_authors];
     int AuthorK[no_main_authors];
