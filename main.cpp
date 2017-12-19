@@ -102,8 +102,7 @@ int main()
     int * predictions_random_forest = classifier1->run_random_forest(train, test);
 
     new_time = difftime(time(&timer),new_time);
-    new_time /= 60;
-    std::cout << new_time << " minutes since previous stage" << endl;
+    std::cout << new_time << " seconds since previous stage" << endl;
 
 
     std::cout << "First KNN:" << endl;
