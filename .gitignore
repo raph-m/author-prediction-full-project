@@ -50,3 +50,7 @@ test_10.txt
 
 main.cpp.autosave
 
+.idea/
+cmake-build-debug/
+
+
