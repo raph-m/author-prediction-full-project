@@ -31,6 +31,8 @@ SOURCES += main.cpp \
     ml_on_author_prediction/KNN/distances.cpp \
     ml_on_author_prediction/KNN/dictionary.cpp \
     ml_on_author_prediction/KNN/myknn_algo.cpp \
+    ml_on_author_prediction/ml_on_author_prediction/Hugo_KNN.cpp
+
 
 HEADERS += \
     author_classification/Preprocessing/testgit.h \
@@ -53,6 +55,58 @@ HEADERS += \
     ml_on_author_prediction/KNN/knn.h \
     ml_on_author_prediction/KNN/distances.h \
     ml_on_author_prediction/KNN/dictionary.h \
-    ml_on_author_prediction/KNN/myknn_algo.h
+    ml_on_author_prediction/KNN/myknn_algo.h \
+    ml_on_author_prediction/ml_on_author_prediction/Hugo_KNN.h
 
-INCLUDEPATH+=../eigen-eigen-67e894c6cd8f/
+#QMAKE_CXXFLAGS_DEBUG += -Zi -MTd
+#QMAKE_CXXFLAGS_RELEASE += -MT
+
+INCLUDEPATH+=../eigen-eigen-67e894c6cd8f/ \
+    /home/raph/opencv/include/
+
+unix:!mac {
+    message("* Using settings for Unix/Linux.")
+    INCLUDEPATH += /usr/local/include/opencv
+
+    LIBS += -L/usr/local/lib/ \
+        -lopencv_core \
+        -lopencv_highgui \
+        -lopencv_imgproc \
+        -lopencv_ml
+}
+
+## OpenCV settings for Mac OS X
+macx {
+    message("* Using settings for Mac OS X.")
+    INCLUDEPATH += /usr/local/include/opencv
+
+    LIBS += -L/usr/local/lib/ \
+        -lopencv_core \
+        -lopencv_highgui \
+        -lopencv_imgproc \
+        -lopencv_ml
+}
+
+## OpenCV settings for Windows and OpenCV 2.4.2
+win32 {
+    message("* Using settings for Windows.")
+    INCLUDEPATH += "C:\\opencv\\build\\include" \
+                   "C:\\opencv\\build\\include\\opencv" \
+                   "C:\\opencv\\build\\include\\opencv2"
+
+    CONFIG(debug, debug | release) {
+        LIBS += -L"C:\\opencv\\build\\x86\\vc10\\lib" \
+            -lopencv_core248d \
+            -lopencv_highgui248d \
+            -lopencv_imgproc248d \
+            -lopencv_ml248d
+    }
+
+    CONFIG(release, debug | release) {
+        LIBS += -L"C:\\opencv\\build\\x86\\vc10\\lib" \
+            -lopencv_core248 \
+            -lopencv_highgui248 \
+            -lopencv_imgproc248 \
+            -lopencv_ml248
+    }
+}

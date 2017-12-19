@@ -12,6 +12,7 @@
 #include "ml_on_author_prediction/RS/multiclass_rs.h"
 
 #include "ml_on_author_prediction/KNN/knn.h"
+#include "ml_on_author_prediction/ml_on_author_prediction/Hugo_KNN.h"
 
 //#include <QtWidgets/QApplication>
 //#include <QtWidgets/QMainWindow>
@@ -25,50 +26,50 @@ using namespace std;
 
 //QT_CHARTS_USE_NAMESPACE
 
-void Ensemble(double ** pred,int nombreAlgo,int NombreAuteur,int k,int* AuteurK,double* ProbaK){
+//void Ensemble(double ** pred,int nombreAlgo,int NombreAuteur,int k,int* AuteurK,double* ProbaK){
 
-    double res[NombreAuteur];
+//    double res[NombreAuteur];
 
-    for(int i=0;i<NombreAuteur;i++)
-        res[i]=0;
+//    for(int i=0;i<NombreAuteur;i++)
+//        res[i]=0;
 
-    for(int i=0;i<NombreAuteur;i++){
-        for(int j=0;j<nombreAlgo;j++){
+//    for(int i=0;i<NombreAuteur;i++){
+//        for(int j=0;j<nombreAlgo;j++){
 
-            res[i]=res[i]+pred[j][i];
-        }
-    }
+//            res[i]=res[i]+pred[j][i];
+//        }
+//    }
 
-    for(int i=0;i<NombreAuteur;i++)
-        res[i]=res[i]/nombreAlgo;
+//    for(int i=0;i<NombreAuteur;i++)
+//        res[i]=res[i]/nombreAlgo;
 
-    vector <int> a;
-
-
-    for(int i=0;i<NombreAuteur;i++){
-        a.push_back(res[i]);
-    }
-
-   std::sort(a.begin(), a.end());
-
-   int b[NombreAuteur];
+//    vector <int> a;
 
 
+//    for(int i=0;i<NombreAuteur;i++){
+//        a.push_back(res[i]);
+//    }
+
+//   std::sort(a.begin(), a.end());
+
+//   int b[NombreAuteur];
 
 
-    for (int i = 0; i < k; ++i){
-        ProbaK[i]=a.at(k-1-i);
 
-        for(int j=0;j<NombreAuteur;j++){
-            if(res[j]==ProbaK[i]){
-                b[i]=j;
-                res[j]=-1;
-            }
-        }
 
-        AuteurK[i]=b[i];
-   }
- }
+//    for (int i = 0; i < k; ++i){
+//        ProbaK[i]=a.at(k-1-i);
+
+//        for(int j=0;j<NombreAuteur;j++){
+//            if(res[j]==ProbaK[i]){
+//                b[i]=j;
+//                res[j]=-1;
+//            }
+//        }
+
+//        AuteurK[i]=b[i];
+//   }
+// }
 
 int main()
 {
@@ -77,13 +78,14 @@ int main()
     new_time = time(&timer);
 
     std::cout << "Fetching features..." << std::endl;
+    std::cout << "id of 1, 2, 3: " << IdToAuthor(1) << " " << IdToAuthor(2) << " " << IdToAuthor(3) << endl;
 
     int no_authors = 10;
-//    int nbriteration = 6;
-//    // std::map<int, std::string> idToAuthor;
-//    //idToAuthor = createTextFeatures(nbriteration);
-//    int lineCount = 0; //nbre de ligne du fichier csv qui résultera du texte test
-//    lineCount = preprocessingTest("../1013.txt","txt", "testResult");
+    int nbriteration = 6;
+    std::map<int, std::string> idToAuthor;
+    idToAuthor = createtxtFile(nbriteration, "output_createtxtfile");
+    int lineCount = 0; //nbre de ligne du fichier csv qui résultera du texte test
+    lineCount = preprocessingTest("../1013.txt","txt", "testResult");
 
 //    new_time = difftime(time(&timer),new_time);
 //    std::cout << new_time << " seconds since previous stage" << endl;
@@ -100,8 +102,8 @@ int main()
 
 //    std::cout << "Learning task..." << endl;
 
-//    //machine learning
-//    std::cout << "Random Forest:" << std::endl;
+    //machine learning
+    std::cout << "Random Forest:" << std::endl;
 
     int numberOfTrees = 1;
     string train = "../finalMatrix.csv";
@@ -123,18 +125,21 @@ int main()
 //    std::cout << new_time << " minutes since previous stage" << endl;
 
     //hugo
-//    std::cout << "Second KNN:" << endl;
+    std::cout << "Second KNN:" << endl;
+    int no_main_authors = 3;
+    double res[no_main_authors];
+    ExecutionML(train, test, no_main_authors, res);
 
-//    new_time = difftime(time(&timer),new_time);
-//    new_time /= 60;
-//    std::cout << new_time << " minutes since previous stage" << endl;
+    new_time = difftime(time(&timer),new_time);
+    new_time /= 60;
+    std::cout << new_time << " minutes since previous stage" << endl;
 
     std::cout << "Combining results of different learners..." << std::endl;
 
-    int no_algos = 1;
+    int no_algos = 2;
     double * res2 [no_algos];
     res2[0] = predictions_random_forest;
-    int no_main_authors = 3;
+    res2[1] = res;
     double ProbaK[no_main_authors];
     int AuthorK[no_main_authors];
     Ensemble(res2, no_algos, no_authors, no_main_authors, AuthorK, ProbaK);
