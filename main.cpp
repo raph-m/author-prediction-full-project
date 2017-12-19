@@ -13,6 +13,7 @@
 
 #include "ml_on_author_prediction/KNN/knn.h"
 #include "ml_on_author_prediction/ml_on_author_prediction/Hugo_KNN.h"
+#include "ml_on_author_prediction/KNN/myknn_algo.h"
 
 //#include <QtWidgets/QApplication>
 //#include <QtWidgets/QMainWindow>
@@ -54,9 +55,6 @@ using namespace std;
 
 //   int b[NombreAuteur];
 
-
-
-
 //    for (int i = 0; i < k; ++i){
 //        ProbaK[i]=a.at(k-1-i);
 
@@ -77,53 +75,44 @@ int main()
     double new_time;
     new_time = time(&timer);
 
-    std::cout << "Fetching features..." << std::endl;
-    std::cout << "id of 1, 2, 3: " << IdToAuthor(1) << " " << IdToAuthor(2) << " " << IdToAuthor(3) << endl;
-
     int no_authors = 10;
-    int nbriteration = 6;
-    std::map<int, std::string> idToAuthor;
-    idToAuthor = createtxtFile(nbriteration, "output_createtxtfile");
     int lineCount = 0; //nbre de ligne du fichier csv qui résultera du texte test
-    lineCount = preprocessingTest("../1013.txt","txt", "testResult");
-
-//    new_time = difftime(time(&timer),new_time);
-//    std::cout << new_time << " seconds since previous stage" << endl;
-
-//    std::cout << "Starting PCA..." << std::endl;
-
-//    float parameter = 0.99;
-//    std::string c = "../apprentissage_10.txt";
-//    std::string test_text = "../testResult.txt";
-//    principalComponentAnalysis(c,test_text, parameter);
-
-//    new_time = difftime(time(&timer),new_time);
-//    std::cout << new_time << " seconds since previous stage" << endl;
-
-//    std::cout << "Learning task..." << endl;
-
-    //machine learning
-    std::cout << "Random Forest:" << std::endl;
-
-    int lineCount = 11;
+    float parameter = 0.98;
+    std::string c = "../apprentissage_10.txt";
+    std::string test_text = "../testResult.txt";
     int numberOfTrees = 1;
     string train = "../finalMatrix.csv";
     string test = "../finalTest.csv";
+    int NumbersofNeighbors=3;
+
+    std::cout << "Fetching features..." << std::endl;
+
+    lineCount = preprocessingTest("../1013.txt","txt", "testResult");
+
+    new_time = difftime(time(&timer),new_time);
+    std::cout << new_time << " seconds since previous stage" << endl;
+
+    std::cout << "Starting PCA..." << std::endl;
+    //principalComponentAnalysis(c,test_text, parameter);
+
+    new_time = difftime(time(&timer),new_time);
+    std::cout << new_time << " seconds since previous stage" << endl;
+
+    std::cout << "Learning task..." << endl;
+
+    //machine learning
+    std::cout << "Random Forest:" << std::endl;
     multiclass_rs * classifier1 = new multiclass_rs(numberOfTrees, no_authors);
     int * predictions_random_forest = classifier1->run_random_forest(train, test);
 
     new_time = difftime(time(&timer),new_time);
     std::cout << new_time << " seconds since previous stage" << endl;
 
-
-    std::cout << "First KNN:" << endl;
-
-    int NumbersofNeighbors=3;
-    int * predictions_first_knn = KNN_( NumbersofNeighbors, test, train);
+//    std::cout << "First KNN:" << endl;
+    int * predictions_first_knn = KNN_(NumbersofNeighbors, test, train);
     new_time = difftime(time(&timer),new_time);
-    new_time /= 60;
-    std::cout << new_time << " minutes since previous stage" << endl;
 
+    std::cout << new_time << " secondes since previous stage" << endl;
     std::cout << "Turning predictions into probability..." << std::endl;
 
     double proba_rs [no_authors];
@@ -150,31 +139,36 @@ int main()
     new_time = difftime(time(&timer),new_time);
     std::cout << new_time << " seconds since previous stage" << endl;
 
+    for (int i=0; i < no_authors; i++){
+        std::cout << IdToAuthor(i) << " : " << proba_rs[i] << endl;
+    }
 
     //hugo
-    std::cout << "Second KNN:" << endl;
-    int no_main_authors = 3;
-    double res[no_main_authors];
-    ExecutionML(train, test, no_main_authors, res);
+//    std::cout << "Second KNN:" << endl;
+//    int no_main_authors = 3;
+//    double res[no_main_authors];
+//    ExecutionML(train, test, no_main_authors, res);
 
-    new_time = difftime(time(&timer),new_time);
-    new_time /= 60;
-    std::cout << new_time << " minutes since previous stage" << endl;
+//    std::cout << "resultat hugo" << res[0] << std::endl;
 
-    std::cout << "Combining results of different learners..." << std::endl;
+//    new_time = difftime(time(&timer),new_time);
+//    new_time /= 60;
+//    std::cout << new_time << " minutes since previous stage" << endl;
 
-    int no_algos = 2;
-    double * res2 [no_algos];
-    res2[0] = proba_rs;
-    res2[1] = proba_first_knn;
-    int no_main_authors = 3;
-    double ProbaK[no_main_authors];
-    int AuthorK[no_main_authors];
-    Ensemble(res2, no_algos, no_authors, no_main_authors, AuthorK, ProbaK);
+//    std::cout << "Combining results of different learners..." << std::endl;
 
-    for (int i = 0; i < no_main_authors;i++) {
-        cout << "Author " << AuthorK[i] << ":" << ProbaK[i] << endl;
-    }
+//    int no_algos = 2;
+//    double * res2 [no_algos];
+//    res2[0] = proba_rs;
+//    res2[1] = proba_first_knn;
+//    int no_main_authors = 3;
+//    double ProbaK[no_main_authors];
+//    int AuthorK[no_main_authors];
+//    Ensemble(res2, no_algos, no_authors, no_main_authors, AuthorK, ProbaK);
+
+//    for (int i = 0; i < no_main_authors;i++) {
+//        cout << "Author " << IdToAuthor(AuthorK[i]) << ":" << ProbaK[i] << endl;
+//    }
 
 //    std::cout<< "Preparing pie chart" << std::endl;
 
